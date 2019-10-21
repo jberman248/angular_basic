@@ -1,0 +1,10 @@
+version: v1
+description: Workflow to echo a nice hello world message to the logs
+
+steps:
+  - name: Step-1-Install
+    description: ""
+    image: projectnebula/core:latest
+    input:
+      - npm install &&
+      npm start
