@@ -6,7 +6,7 @@ steps:
     description: ""
     image: luther007/cynerge_images:latest
     input:
-      - git clone git@github.com:LutherJolliff/angular_basic.git &&
+      - git clone https://github.com/LutherJolliff/angular_basic.git &&
         cd angular_basic && 
         npm install &&
         npm start
