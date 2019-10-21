@@ -6,5 +6,4 @@ steps:
     description: ""
     image: luther007/cynerge_images:latest
     input:
-      - npm install &&
-        npm start
+      - npm install
