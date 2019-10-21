@@ -2,8 +2,11 @@ version: v1
 description: Testing build speed with basic angular
 
 steps:
-  - name: Step-1-Install
+  - name: Step-0-Install
     description: ""
     image: luther007/cynerge_images:latest
     input:
-      - npm install
+      - git clone git@github.com:LutherJolliff/angular_basic.git &&
+        cd angular_basic && 
+        npm install &&
+        npm start
