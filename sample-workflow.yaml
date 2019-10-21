@@ -4,7 +4,7 @@ description: Testing build speed with basic angular
 steps:
   - name: Step-1-Install
     description: ""
-    image: projectnebula/core:latest
+    image: luther007/cynerge_images:latest
     input:
       - npm install &&
         npm start
