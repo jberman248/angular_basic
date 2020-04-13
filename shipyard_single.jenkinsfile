@@ -10,7 +10,7 @@ pipeline {
     }
 
     environment {
-        EMAIL_RECIPIANTS = ''
+        EMAIL_RECIPIANTS = 'null@example.com'
         NEXUS_USER = credentials('nexus-user')
         NEXUS_PASS = credentials('nexus-pass')
         NEXUS_REPO = credentials('nexus-raw-repo')
