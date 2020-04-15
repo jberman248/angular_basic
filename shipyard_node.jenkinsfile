@@ -67,7 +67,7 @@ pipeline {
                 success {
                     // Do NOT delete the empty line underneath below curl command. It is necessary for script logic
                     dir('test-results') {
-                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}${BUILD_TAG}-pa11y-report/"
+                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Pa11y/${JOB_NAME}/${BUILD_NUMBER}/"
 
                     }
                 }
@@ -112,7 +112,7 @@ pipeline {
                 success {
                     // Do NOT delete the empty line underneath below curl command. It is necessary for script logic
                     dir('./report/lighthouse') {
-                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}${BUILD_TAG}-lighthouse-report/"
+                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Lighthouse/${JOB_NAME}/${BUILD_NUMBER}/"
 
                     }
                 }
