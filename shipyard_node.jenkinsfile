@@ -90,6 +90,14 @@ pipeline {
         }
 
         stage('Store NPM Artifact') {
+            agent {
+                docker {
+                    image 'luther007/cynerge_images'
+                    args '-u root'
+                    alwaysPull true
+                }
+            }
+
             environment { 
                 NPM_USER = credentials('nexus-user')
                 NPM_PASS = credentials('nexus-pass')
