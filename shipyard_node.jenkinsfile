@@ -2,19 +2,17 @@ def shipyardBuildBadge = addEmbeddableBadgeConfiguration(id: "shipyard-build", s
 
 pipeline {
     agent {
-        docker {
-            image 'luther007/cynerge_images'
-            args '-u root'
-            alwaysPull true
+        node {
+            label 'ubuntu-slave'
         }
     }
 
     environment {
-        EMAIL_RECIPIANTS = 'null@example.com'
+        EMAIL_RECIPIANTS = "ljolliff@cynerge.com"
         NEXUS_USER = credentials('nexus-user')
         NEXUS_PASS = credentials('nexus-pass')
         NEXUS_REPO = credentials('nexus-raw-repo')
-        APP_SOURCE = './src/**/**/**/**.html'
+        APP_SOURCE = "./src/**/**/**/**.html"
         STATUS_SUCCESS = ''
         JENKINS_URL = "${JENKINS_URL}"
         JOB_NAME = "${JOB_NAME}"
@@ -26,6 +24,13 @@ pipeline {
     stages {
 
         stage('Dependencies') {
+            agent {
+                docker {
+                    image 'luther007/cynerge_images'
+                    args '-u root'
+                    alwaysPull true
+                }
+            }
             steps {
                 echo 'Installing...'
                 sh 'echo $GIT_BRANCH'
@@ -46,6 +51,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('Cynerge Sonarqube') {
                     sh 'printenv'
+                    sh 'ls'
                     // sh "${JENKINS_HOME}/tools/hudson.plugins.sonar.SonarRunnerInstallation/cynerge-sonarqube/bin/sonar-scanner"
                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.login=$SONAR_TOKEN -Dsonar.projectKey=$SONAR_PROJECT -Dsonar.sources=$SONAR_SOURCE"
                 }
@@ -54,6 +60,14 @@ pipeline {
 
         // Run accessability scanning with Pa11y
         stage('Pa11y') {
+            agent {
+                docker {
+                    image 'luther007/cynerge_images'
+                    args '-u root'
+                    alwaysPull true
+                }
+            }
+
             steps {
                 sh 'rm -rf test-results || echo "directory does not exist"'
                 sh 'mkdir test-results'
@@ -76,13 +90,6 @@ pipeline {
         }
 
         stage('Store NPM Artifact') {
-            agent {
-                docker {
-                    image 'luther007/cynerge_images:latest'
-                    args '-u root'
-                    label 'ubuntu-slave'
-                }
-            }
             environment { 
                 NPM_USER = credentials('nexus-user')
                 NPM_PASS = credentials('nexus-pass')
@@ -102,6 +109,13 @@ pipeline {
 
         // Run accessability scanning with Lighthouse
         stage('Lighthouse') {
+            agent {
+                docker {
+                    image 'luther007/cynerge_images'
+                    args '-u root'
+                    alwaysPull true
+                }
+            }
             steps {
                 sh 'rm -rf report/lighthouse || echo "directory does not exist"'
                 sh 'mkdir -p report/lighthouse'
