@@ -8,11 +8,11 @@ pipeline {
     }
 
     environment {
-        EMAIL_RECIPIANTS = "ljolliff@cynerge.com"
+        EMAIL_RECIPIANTS = 'ljolliff@cynerge.com'
         NEXUS_USER = credentials('nexus-user')
         NEXUS_PASS = credentials('nexus-pass')
         NEXUS_REPO = credentials('nexus-raw-repo')
-        APP_SOURCE = "./src/**/**/**/**.html"
+        APP_SOURCE = './src/**/**/**/**.html'
         STATUS_SUCCESS = ''
         JENKINS_URL = "${JENKINS_URL}"
         JOB_NAME = "${JOB_NAME}"
@@ -20,7 +20,7 @@ pipeline {
         SONAR_PROJECT = "${JOB_NAME}"
         SONAR_SOURCE = 'src'
     }
-    
+
     stages {
 
         stage('Dependencies') {
@@ -47,7 +47,7 @@ pipeline {
 
             environment {
                 scannerHome = tool 'cynerge-sonarqube'
-            }            
+            }
             steps {
                 withSonarQubeEnv('Cynerge Sonarqube') {
                     sh 'printenv'
@@ -81,7 +81,7 @@ pipeline {
                 success {
                     // Do NOT delete the empty line underneath below curl command. It is necessary for script logic
                     dir('test-results') {
-                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Pa11y/${JOB_NAME}/${BUILD_NUMBER}/"
+                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Pa11y/${JOB_NAME}/${BRANCH_NAME}/${BUILD_NUMBER}/"
 
                     }
                 }
@@ -97,7 +97,6 @@ pipeline {
                     alwaysPull true
                 }
             }
-
             environment { 
                 NPM_USER = credentials('nexus-user')
                 NPM_PASS = credentials('nexus-pass')
@@ -134,7 +133,7 @@ pipeline {
                 success {
                     // Do NOT delete the empty line underneath below curl command. It is necessary for script logic
                     dir('./report/lighthouse') {
-                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Lighthouse/${JOB_NAME}/${BUILD_NUMBER}/"
+                        sh "curl -v --user '${NEXUS_USER}:${NEXUS_PASS}' --upload-file \"{\$(echo *.html | tr ' ' ',')}\" ${NEXUS_REPO}Lighthouse/${JOB_NAME}/${BRANCH_NAME}/${BUILD_NUMBER}/"
 
                     }
                 }
