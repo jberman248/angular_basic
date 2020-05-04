@@ -1,0 +1,27 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  install-deps:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+  unit-test:
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm test
+workflows:
+    cynerge-internal:
+      jobs:
+        - install-deps
+        - unit-test:
+            requires:
+              - install-deps
