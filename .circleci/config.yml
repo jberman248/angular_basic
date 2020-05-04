@@ -38,7 +38,7 @@ jobs:
                 name: "Lint Test"
                 command: |
                   mkdir -p test-results/es_lint
-                  ./node_modules/.bin/eslint $ES_LINT_SOURCE > test-results/es_lint/eslint-results.json
+                  ./node_modules/.bin/eslint $ES_LINT_SOURCE --fix > test-results/es_lint/eslint-results.json
       - store_artifacts:
           path: test-results/es_lint
 
