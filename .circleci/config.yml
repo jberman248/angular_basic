@@ -1,6 +1,14 @@
 version: 2.1
 orbs:
   node: circleci/node@1.1.6
+
+references:
+  set_environment_variables: &set_environment_variables
+    run:
+      name: Set Environment Variables
+      command: |
+        echo 'export ES_LINT_SOURCE=./src/**/**/**/**.ts' >> ${BASH_ENV}
+
 jobs:
   install-deps:
     executor:
@@ -11,13 +19,30 @@ jobs:
           steps:
             - run: npm install
   unit-test:
-    executor:
-      name: node/default
+    docker:
+      - image: circleci/node:12-browsers-legacy
     steps:
       - checkout
       - node/with-cache:
           steps:
             - run: npm test
+  linting-js:
+    docker:
+      - image: circleci/node:12-browsers-legacy
+    steps:
+      - checkout
+      - *set_environment_variables
+      - node/with-cache:
+          steps:
+            - run:
+                name: "Lint Test"
+                command: |
+                  mkdir -p test-results/es_lint
+                  ./node_modules/.bin/eslint $ES_LINT_SOURCE > test-results/es_lint/eslint-results.json
+      - store_artifacts:
+          path: test-results/es_lint
+
+
 workflows:
     cynerge-internal:
       jobs:
