@@ -50,3 +50,6 @@ workflows:
         - unit-test:
             requires:
               - install-deps
+        - linting-js:
+            requires:
+              - install-deps
