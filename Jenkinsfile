@@ -66,6 +66,7 @@ pipeline {
                     }
                 }
             }
+        }
 
         }
       
@@ -83,6 +84,6 @@ pipeline {
 
             cleanWs()
         }
-    }
+
     }
 }
