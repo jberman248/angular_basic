@@ -1,55 +1,25 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
+
+parameters:
+  contact:
+    type: string
+  email:
+    type: string
+  tel:
+    type: string
+  company:
+    type: string
+  employeeNum:
+    type: integer
+# Use a package of configuration called an orb.
 orbs:
-  node: circleci/node@1.1.6
-
-references:
-  set_environment_variables: &set_environment_variables
-    run:
-      name: Set Environment Variables
-      command: |
-        echo 'export ES_LINT_SOURCE=./src/**/**/**/**.ts' >> ${BASH_ENV}
-
-jobs:
-  install-deps:
-    executor:
-      name: node/default
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-  unit-test:
-    docker:
-      - image: circleci/node:12-browsers-legacy
-    steps:
-      - checkout
-      - node/with-cache:
-          steps:
-            - run: npm test
-  linting-js:
-    docker:
-      - image: circleci/node:12-browsers-legacy
-    steps:
-      - checkout
-      - *set_environment_variables
-      - node/with-cache:
-          steps:
-            - run:
-                name: "Lint Test"
-                command: |
-                  mkdir -p test-results/es_lint
-                  ./node_modules/.bin/eslint $ES_LINT_SOURCE --fix > test-results/es_lint/eslint-results.json
-      - store_artifacts:
-          path: test-results/es_lint
-
-
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+# Orchestrate or schedule a set of jobs
 workflows:
-    cynerge-internal:
-      jobs:
-        - install-deps
-        - unit-test:
-            requires:
-              - install-deps
-        - linting-js:
-            requires:
-              - install-deps
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
+    jobs:
+      - welcome/run
